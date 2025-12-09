@@ -5,7 +5,7 @@
 This repository serves as an **index** for the full‑stack Ecommerce
 solution, composed of:
 
-- A full RESTful backend API built with **ASP.NET Core 8**, following
+- A full RESTful backend API built with **ASP.NET Core 10**, following
   **Clean Architecture** and **DDD principles**. (See
   `Ecommerce-backend`)
 - A complete **Angular 21 frontend**, including an admin dashboard,
@@ -34,7 +34,7 @@ modern UI.
 
 ### Backend
 
-- ASP.NET Core 8\
+- ASP.NET Core 10\
 - Entity Framework Core + SQL Server\
 - JWT authentication\
 - Swagger / OpenAPI documentation
