@@ -38,29 +38,39 @@ modern UI.
 - Entity Framework Core + SQL Server\
 - JWT authentication\
 - Swagger / OpenAPI documentation
+- Elasticsearch
+- OpenTelemetry
+- MongoDB
+- Redis
+- Mailkit
+- CheckHealth
+- Serializer
+- Jaeger
 
 ### Frontend
 
 - Angular 21\
 - HTML, CSS, and UI component libraries
+- Tailwind
 
 ## 🚀 How to Run the Project (Development)
 
 ```bash
 # Clone the parent index repository
-git clone https://github.com/your-user/Ecommerce-fullstack.git
-cd Ecommerce-fullstack
+git clone https://github.com/your-user/ecommerce-project.git
+cd ecommerce-project
 
 # Clone backend
-git clone https://github.com/luismab95/Ecommerce-backend.git
-cd Ecommerce-backend
+git clone https://github.com/luismab95/ecommerce-backend.git
+cd ecommerce-backend
 # Follow backend README instructions:
 # install dependencies, set connection string, run migrations, start API
+# You can use the docker-compose file for backend services
 
 # Clone frontend
 cd ..
-git clone https://github.com/luismab95/Ecommerce-front.git
-cd Ecommerce-front
+git clone https://github.com/luismab95/ecommerce-front.git
+cd ecommerce-front
 # Install dependencies and run (npm install, npm start or similar)
 ```
 
@@ -81,4 +91,3 @@ This repository centralizes:
 - Project-wide documentation\
 - Architecture overview\
 - Versioning and deployment coordination\
-- Portfolio visibility as a real full‑stack application
