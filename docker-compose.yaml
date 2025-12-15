@@ -1,0 +1,125 @@
+
+services:
+  # Nuestra app .NET
+  # ecommerce-api:
+  #   build: .
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - Jaeger__AgentHost=jaeger
+  #     - Elasticsearch__Uri=http://elasticsearch:9200
+  #     - Seq__ServerUrl=http://seq:5341
+  #   depends_on:
+  #     - jaeger
+  #     - elasticsearch
+  #     - seq
+  #     - redis
+  #     - sqlserver
+  #   networks:
+  #     - observability-network
+
+  # Jaeger para tracing distribuido
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    restart: always
+    ports:
+      - "16686:16686"  # UI
+      - "14268:14268"  # Collector
+      - "6831:6831/udp" # Agent
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    networks:
+      - observability-network
+
+  # Elastic Stack para logs
+  elasticsearch:
+    image: elasticsearch:9.2.2
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    networks:
+      - observability-network
+
+  # Kibana para dashboard
+  kibana:
+    image: kibana:9.2.2
+    container_name: kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - observability-network
+
+  # Seq para logs estructurados
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: always
+    ports:
+      - "5341:5341"  # Ingestión HTTP
+      - "5342:80"    # UI/API
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=Admin123
+    networks:
+      - observability-network
+
+  # Redis para cache
+  redis:
+    image: redis:8.4.0
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - observability-network
+
+  mongodb:
+    image: mongo:8.2.2
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: Admin123
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - observability-network
+
+  # SQL Server para datos
+  # sqlserver:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=YourPassword123
+  #     - MSSQL_PID=Developer
+  #   ports:
+  #     - "1433:1433"
+  #   networks:
+  #     - observability-network
+
+networks:
+  observability-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:
